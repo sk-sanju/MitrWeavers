@@ -309,10 +309,10 @@ a:focus {
 .slider_section .detail-box h1 {
   font-weight: bold;
   font-size: 3rem;
+  width: 75%;
 }
 
 .slider_section .detail-box p {
-  width: 75%;
   margin-top: 15px;
 }
 
