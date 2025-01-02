@@ -4,10 +4,15 @@
 body {
   font-family: "Poppins", sans-serif;
   color: #0c0c0c;
-  background-color: #ffffff;
+  background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(221, 165, 45));
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
+.shop-now{
+  background-color: #fd9c6b;
+  color: #ffff;
+}
 .layout_padding {
   padding: 90px 0;
 }
@@ -341,6 +346,7 @@ a:focus {
   height: 100%;
   z-index: 2;
   overflow: hidden;
+  
 }
 
 .slider_section .slider_bg_box img {
@@ -357,14 +363,15 @@ a:focus {
 }
 
 .shop_section .box {
-  background-color: #eeeeee;
+  background-color: #ffffff;
+  border: #000000;
   position: relative;
   padding: 10px;
   margin-top: 25px;
 }
 
 .shop_section .box a {
-  color: #000000;
+  color: #fd9c6b;
   align-items: center;
 }
 
@@ -408,7 +415,7 @@ a:focus {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #ffffff;
+  background-color: #c4c4c465;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
