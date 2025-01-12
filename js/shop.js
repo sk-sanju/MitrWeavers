@@ -287,7 +287,7 @@ const products = [
                     <img src="${product.image}" class="card-img-top" alt="...">
                     <h5 class="card-title">${product.title}</h5>
                     <p class="card-text">Price: ₹${product.price}</p>
-                    <p class="card-description">Description: ${product.description}</p>
+                    <p class="card-description">${product.description}</p>
                     <button class="btn btn-primary add-to-cart" data-id="${product.id}" data-name="${product.title}" data-price="${product.price}">Add to Cart</button>
                 </div>
         `;
