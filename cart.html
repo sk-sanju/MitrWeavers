@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Mitr Weavers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Mitr Weavers</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="mb-4">Shopping Cart</h2>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart-items">
+                                <!-- Cart items will be dynamically injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Cart Summary</h5>
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Subtotal
+                                    <span id="subtotal">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Shipping
+                                    <span>Free</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total
+                                    <span id="total">0</span>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary w-100">Proceed to Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 Mitr Weavers. All rights reserved.</p>
+            <p>Follow us on <a href="https://instagram.com/mitrweavers" class="text-white">Instagram</a> | <a href="https://facebook.com/MitrWeavers" class="text-white">Facebook</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartItemsElement = document.getElementById('cart-items');
+            const subtotalElement = document.getElementById('subtotal');
+            const totalElement = document.getElementById('total');
+
+            function loadCart() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                let subtotal = 0;
+                cartItemsElement.innerHTML = '';
+
+                cart.forEach(item => {
+                    const total = item.price * item.quantity;
+                    subtotal += total;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td class="price">${item.price}</td>
+                        <td>
+                            <input type="number" class="form-control quantity" value="${item.quantity}" min="1" data-id="${item.id}">
+                        </td>
+                        <td class="total">${total.toFixed(2)}</td>
+                        <td><button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">Remove</button></td>
+                    `;
+                    cartItemsElement.appendChild(row);
+                });
+
+                subtotalElement.textContent = subtotal.toFixed(2);
+                totalElement.textContent = subtotal.toFixed(2);
+
+                attachEventListeners();
+            }
+
+            function attachEventListeners() {
+                document.querySelectorAll('.quantity').forEach(input => {
+                    input.addEventListener('input', function() {
+                        const id = this.dataset.id;
+                        const quantity = parseInt(this.value);
+                        updateQuantity(id, quantity);
+                    });
+                });
+
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        removeItem(id);
+                    });
+                });
+            }
+
+            function updateQuantity(id, quantity) {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const item = cart.find(item => item.id === id);
+                if (item) {
+                    item.quantity = quantity;
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    loadCart();
+                }
+            }
+
+            function removeItem(id) {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart = cart.filter(item => item.id !== id);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCart();
+            }
+
+            loadCart();
+        });
+    </script>
+</body>
+</html>
