@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", function () {
 const products = [
     {
       title: "DHAVANI SET",
@@ -18,60 +19,40 @@ const products = [
       image: "https://github.com/sk-sanju/MitrWeavers/blob/main/images/dhavani/d3.jpg?raw=true",
     },
 ];
-const ProductContainer = document.getElementById("dhavaniProductContainer");
-    // Function to render product cards
-    function displayProductCards(products) {
-      products.forEach(product => {
-        // Create card elements
-        const card = document.createElement("div");
-        card.className = "product-card";
+const productContainer = document.getElementById("dhavaniProductContainer");
+    products.forEach((product) => {
+        const productCard = document.createElement("div");
+        productCard.className = "col-md-4 mb-4";
+        productCard.innerHTML = `
+                <div class="card-body">
+                    <img src="${product.image}" class="card-img-top" alt="...">
+                    <h5 class="card-title">${product.title}</h5>
+                    <p class="card-text">Price: ₹${product.price}</p>
+                    <p class="card-description">${product.description}</p>
+                    <button class="btn btn-primary add-to-cart" data-id="${product.id}" data-name="${product.title}" data-price="${product.price}">Add to Cart</button>
+                </div>
+        `;
+        productContainer.appendChild(productCard);
+    });
 
-        const img = document.createElement("img");
-        img.className = "product-image";
-        img.src = product.image;
-        img.alt = product.title;
+    // Add to Cart functionality
+    document.querySelectorAll(".add-to-cart").forEach((button) => {
+        button.addEventListener("click", function () {
+            const id = this.dataset.id;
+            const name = this.dataset.name;
+            const price = parseFloat(this.dataset.price);
 
-        const details = document.createElement("div");
-        details.className = "product-details";
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const existingProduct = cart.find((item) => item.id === id);
 
-        const title = document.createElement("h3");
-        title.className = "product-title";
-        title.textContent = product.title;
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
 
-        const price = document.createElement("p");
-        price.className = "product-price";
-        price.textContent = product.price;
-
-        const description = document.createElement("p");
-        description.className = "product-description";
-        description.textContent = product.description;
-
-        const buyNow = document.createElement("a");
-        buyNow.className = "buy-now";
-        buyNow.href = "#";
-        buyNow.textContent = "Buy";
-
-        const addToCart = document.createElement("button");
-        addToCart.className = "cart";
-        addToCart.textContent = "Cart";
-        addToCart.addEventListener("click", () => {
-            alert(`${product.title} has been added to your cart.`);
-            window.location.href = "/cart.html";
+            localStorage.setItem("cart", JSON.stringify(cart));
+            window.location.href = "cart.html"; // Redirect to cart page
         });
-
-        // Append elements to card
-        details.appendChild(title);
-        details.appendChild(price);
-        details.appendChild(description);
-        details.appendChild(buyNow);
-        details.appendChild(addToCart);
-        card.appendChild(img);
-        card.appendChild(details);
-
-        // Append card to container
-        ProductContainer.appendChild(card);
-      });
-    }
-
-    // Call the function to display product cards
-    displayProductCards(products);
+    });
+});
